@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/liel-almog/url-shortener/routes"
 )
 
 func setupRouter(app *echo.Echo) {
@@ -12,4 +13,7 @@ func setupRouter(app *echo.Echo) {
 			"message": "Hello World!",
 		})
 	})
+
+	api := app.Group("/api")
+	routes.NewUrlRoute(api)
 }

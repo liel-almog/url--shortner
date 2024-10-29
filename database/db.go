@@ -18,7 +18,7 @@ var (
 
 const file string = "db.sqlite"
 const create string = `
-  CREATE TABLE "urls" (
+  CREATE TABLE IF NOT EXISTS "urls"  (
 	"short_url"	TEXT NOT NULL UNIQUE,
 	"original_url"	TEXT NOT NULL UNIQUE,
 	"created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

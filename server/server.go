@@ -15,7 +15,6 @@ var app *echo.Echo
 
 func Serve() {
 	app = echo.New()
-	app.HTTPErrorHandler = func(err error, c echo.Context) {}
 
 	app.Use(middleware.Recover())
 
