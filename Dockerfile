@@ -4,9 +4,6 @@ FROM golang:1.22-alpine AS builder
 # Set working directory
 WORKDIR /app
 
-# Set environment variables
-ENV GIN_MODE=release
-
 # Copy all files to the container
 COPY . .
 
