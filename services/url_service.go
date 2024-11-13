@@ -7,6 +7,7 @@ import (
 )
 
 type UrlService interface {
+	GetOriginalUrl(shortURL string) (string, error)
 }
 
 type urlServiceImpl struct {
@@ -30,4 +31,14 @@ func GetUrlService() UrlService {
 	})
 
 	return urlService
+}
+
+func (service *urlServiceImpl) GetOriginalUrl(shortURL string) (string, error) {
+	originalUrl, err := service.urlRepository.FindOriginalUrl(shortURL)
+
+	if err != nil {
+		return "", err
+	}
+
+	return originalUrl, nil
 }

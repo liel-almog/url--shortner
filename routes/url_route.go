@@ -9,6 +9,6 @@ func NewUrlRoute(router *echo.Group) {
 	group := router.Group("/url")
 
 	controller := controllers.GetUrlController()
-	group.GET("", controller.RedirectUrl)
+	group.GET("/:shortUrl", controller.RedirectToOriginalUrl)
 	group.POST("/shorten", controller.Shorten)
 }

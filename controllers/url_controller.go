@@ -1,14 +1,18 @@
 package controllers
 
 import (
+	"errors"
+	"net/http"
 	"sync"
 
 	"github.com/labstack/echo/v4"
+	"github.com/liel-almog/url-shortener/errors/apperrors"
+	"github.com/liel-almog/url-shortener/models"
 	"github.com/liel-almog/url-shortener/services"
 )
 
 type UrlController interface {
-	RedirectUrl(c echo.Context) error
+	RedirectToOriginalUrl(c echo.Context) error
 	Shorten(c echo.Context) error
 }
 
@@ -35,8 +39,31 @@ func GetUrlController() UrlController {
 	return urlController
 }
 
-func (u *urlControllerImpl) RedirectUrl(c echo.Context) error {
-	return nil
+// This is another way to bind!
+
+// var model models.RedirectToOriginalUrlModel
+
+// if err := (&echo.DefaultBinder{}).BindPathParams(c, &model); err != nil {
+// 	return echo.ErrBadRequest
+// }
+
+func (u *urlControllerImpl) RedirectToOriginalUrl(c echo.Context) error {
+	model := new(models.RedirectToOriginalUrlModel)
+
+	if err := c.Bind(model); err != nil {
+		return echo.ErrBadRequest
+	}
+
+	originalUrl, err := u.urlService.GetOriginalUrl(model.ShortUrl)
+	if err != nil {
+		if errors.Is(err, apperrors.ErrUrlNotFound) {
+			return echo.ErrNotFound
+		}
+
+		return echo.ErrInternalServerError
+	}
+
+	return c.Redirect(http.StatusFound, originalUrl)
 }
 
 func (u *urlControllerImpl) Shorten(c echo.Context) error {

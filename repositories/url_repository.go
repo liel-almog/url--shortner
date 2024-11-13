@@ -1,16 +1,19 @@
 package repositories
 
 import (
+	"database/sql"
 	"sync"
 
 	"github.com/liel-almog/url-shortener/database"
+	"github.com/liel-almog/url-shortener/errors/apperrors"
 )
 
 type UrlRepository interface {
+	FindOriginalUrl(shortURL string) (string, error)
 }
 
 type urlRepositoryImpl struct {
-	db *database.Sqlite
+	sqlite *database.Sqlite
 }
 
 var (
@@ -20,7 +23,7 @@ var (
 
 func newUrlRepository() *urlRepositoryImpl {
 	return &urlRepositoryImpl{
-		db: database.GetDB(),
+		sqlite: database.GetDB(),
 	}
 }
 
@@ -30,4 +33,19 @@ func GetUrlRepository() UrlRepository {
 	})
 
 	return urlRepository
+}
+
+func (repo *urlRepositoryImpl) FindOriginalUrl(shortURL string) (string, error) {
+	var originalURL string
+
+	row := repo.sqlite.Db.QueryRow("SELECT original_url FROM urls WHERE short_url = ?", shortURL)
+	if err := row.Scan(&originalURL); err != nil {
+		if err == sql.ErrNoRows {
+			return "", apperrors.ErrUrlNotFound
+		}
+
+		return "", err
+	}
+
+	return originalURL, nil
 }

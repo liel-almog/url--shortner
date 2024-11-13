@@ -8,7 +8,7 @@ import (
 )
 
 type Sqlite struct {
-	db *sql.DB
+	Db *sql.DB
 }
 
 var (
@@ -37,13 +37,13 @@ func newDB() {
 		}
 
 		sqlite = &Sqlite{
-			db: db,
+			Db: db,
 		}
 	})
 }
 
 func (q *Sqlite) Close() {
-	q.db.Close()
+	q.Db.Close()
 }
 
 func GetDB() *Sqlite {
