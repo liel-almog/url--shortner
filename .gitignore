@@ -41,7 +41,8 @@ _obj
 _test
 _testmain.go
 .env
-db.sqlite
+db.sqlite*
+db.sq*
 
 /VERSION.cache
 /bin/

@@ -20,9 +20,9 @@ const file string = "db.sqlite"
 const create string = `
   CREATE TABLE IF NOT EXISTS "urls"  (
 	"short_url"	TEXT NOT NULL UNIQUE,
-	"original_url"	TEXT NOT NULL UNIQUE,
-	"created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY("original_url")
+	"original_url"	TEXT NOT NULL,
+	"created_at"	TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY("short_url")
 	);
 	`
 

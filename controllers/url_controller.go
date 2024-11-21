@@ -53,6 +53,7 @@ func (u *urlControllerImpl) RedirectToOriginalUrl(c echo.Context) error {
 	if err := c.Bind(model); err != nil {
 		return echo.ErrBadRequest
 	}
+	// Validate the URL max length
 
 	originalUrl, err := u.urlService.GetOriginalUrl(model.ShortUrl)
 	if err != nil {
@@ -67,5 +68,21 @@ func (u *urlControllerImpl) RedirectToOriginalUrl(c echo.Context) error {
 }
 
 func (u *urlControllerImpl) Shorten(c echo.Context) error {
-	return nil
+	model := new(models.ShortenUrlModel)
+
+	if err := c.Bind(model); err != nil {
+		return echo.ErrBadRequest
+	}
+
+	// Validate that the URL starts with https://
+	// Validate the URL max length
+
+	shortUrl, err := u.urlService.Shorten(model.OriginalUrl)
+	if err != nil {
+		return echo.ErrInternalServerError
+	}
+
+	return c.JSON(http.StatusCreated, echo.Map{
+		"shortUrl": shortUrl,
+	})
 }

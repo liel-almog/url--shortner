@@ -7,6 +7,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/mattn/go-sqlite3 v1.14.24
+	golang.org/x/exp v0.0.0-20241108190413-2d47ceb2692f
 )
 
 require (
